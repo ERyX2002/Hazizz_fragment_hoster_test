@@ -2,12 +2,14 @@ package com.indeed.hazizz.Activities;
 
 import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.MyCallback;
-import com.indeed.hazizz.Communication.POJO.Requests.Register;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.ResponseBodies;
 import com.indeed.hazizz.Communication.ResponseHandler;
 import com.indeed.hazizz.R;
+import com.indeed.hazizz.SharedPrefs;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,10 +21,6 @@ import android.widget.TextView;
 
 import java.util.HashMap;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 public class LoginActivity extends AppCompatActivity {
 
     private String username;
@@ -33,11 +31,9 @@ public class LoginActivity extends AppCompatActivity {
     private CheckBox checkBox_autoLogin;
     private Button button_login;
     private TextView textView;
-    private int heay;
 
     private MyCallback<ResponseBodies.Error> errorCallback;
 
-    private static final String BASE_URL = "http://80.98.42.103:8080/";
     private ResponseHandler responseHandler = new ResponseHandler() {
 
         @Override
@@ -158,6 +154,9 @@ public class LoginActivity extends AppCompatActivity {
         passwordET = findViewById(R.id.editText_password);
         checkBox_autoLogin = findViewById(R.id.checkBox_autoLogin);
         textView = findViewById(R.id.textView);
+
+        textView.append("hah");
+
         button_login = (Button) findViewById(R.id.button_login);
 
         button_login.setOnClickListener(new View.OnClickListener() {
@@ -177,28 +176,39 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(HashMap<String, Object> response) {
                          //   textView.append("\n errorCode: " + response.get("errorCode"));
-                         //   Log.e("hey", "got here");
-
+                            Log.e("hey", "got here onResponse");
+                            SharedPrefs.save(getBaseContext(), "token", "token", (String) response.get("token"));
+                            textView.append("\n" + SharedPrefs.getString(getBaseContext(), "token", "token"));
+                            switchToMain();
                         }
 
                         @Override
                         public void onFailure() {
                             textView.append("\n  no response");
+                            Log.e("hey", "4");
+                            Log.e("hey", "got here onFailure");
                         }
 
                         @Override
                         public void onErrorResponse(HashMap<String, Object> errorResponse) {
                             textView.append("\n errorCode: " + errorResponse.get("errorCode"));
                             Log.e("hey", "got here");
+                            Log.e("hey", "got here onResponse");
                         }
                     };
-                    MiddleMan sendRegisterRequest = new MiddleMan("login", requestBody, responseHandler);
+                    MiddleMan sendRegisterRequest = new MiddleMan(getBaseContext(), "login", requestBody, responseHandler);
                     sendRegisterRequest.sendRequest();
                 }else{
-                    // show that the username or password not long enough
+                    //TODO show that the username or password not long enough
                 }
             }
         });
+    }
+
+    private void switchToMain(){
+        Intent i = new Intent(this, MainActivity.class);
+      //  i.putExtra("username", username);
+        startActivity(i);
     }
 }
 

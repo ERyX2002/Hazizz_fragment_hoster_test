@@ -195,7 +195,7 @@ public class SignupActivity extends AppCompatActivity {
                             Log.e("hey", "got here");
                         }
                     };
-                    MiddleMan sendRegisterRequest = new MiddleMan("register", requestBody, responseHandler);
+                    MiddleMan sendRegisterRequest = new MiddleMan(getBaseContext(),"register", requestBody, responseHandler);
                     sendRegisterRequest.sendRequest();
                 }else{
 

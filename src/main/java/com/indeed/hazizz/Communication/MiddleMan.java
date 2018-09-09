@@ -1,5 +1,6 @@
 package com.indeed.hazizz.Communication;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -24,9 +25,9 @@ public class MiddleMan{
 
     private Request newRequest;
     private String requestType;
-    public MiddleMan(String requestType, HashMap<String, Object>  pp, CustomResponseHandler cOnResponse) {
+    public MiddleMan(Context context, String requestType, HashMap<String, Object>  pp, CustomResponseHandler cOnResponse) {
         this.requestType = requestType;
-        newRequest = new Request(requestType, pp, cOnResponse);
+        newRequest = new Request(context, requestType, pp, cOnResponse);
     }
 
     public void sendRequest() {

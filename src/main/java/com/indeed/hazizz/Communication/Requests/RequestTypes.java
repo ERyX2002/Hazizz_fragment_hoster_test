@@ -41,6 +41,11 @@ public interface RequestTypes{
 
     );
 
+    @GET("me/fulldetails")
+    Call<HashMap<String, Object>> me(
+            @HeaderMap Map<String, String> headers
+    );
+
 /*
     public HashMap<String, String> makeHeader(){
         headerMap = new HashMap<String, String>();

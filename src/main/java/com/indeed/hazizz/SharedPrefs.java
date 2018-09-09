@@ -12,6 +12,7 @@ import java.util.Set;
 public class SharedPrefs {
 
     //SharedPreferences file name
+    private static String fileName;
     private static String SHARED_PREFS_FILE_NAME = "token";
 
     //here you can centralize all your shared prefs keys
@@ -20,87 +21,88 @@ public class SharedPrefs {
     //create SharedPreferences file if not present
 
 
-    private static SharedPreferences getPrefs(Context context) {
-        return context.getSharedPreferences(SHARED_PREFS_FILE_NAME, Context.MODE_PRIVATE);
+    private static SharedPreferences getPrefs(Context context, String fileName1) {
+        fileName = fileName1;
+        return context.getSharedPreferences(fileName, Context.MODE_PRIVATE);
     }
 
     //Save Booleans
-    public static void savePref(Context context, String key, boolean value) {
-        getPrefs(context).edit().putBoolean(key, value).commit();
+    public static void savePref(Context context, String fileName, String key, boolean value) {
+        getPrefs(context, fileName).edit().putBoolean(key, value).commit();
     }
 
     //Get Booleans
-    public static boolean getBoolean(Context context, String key) {
-        return getPrefs(context).getBoolean(key, false);
+    public static boolean getBoolean(Context context, String fileName, String key) {
+        return getPrefs(context, fileName).getBoolean(key, false);
     }
 
     //Get Booleans if not found return a predefined default value
-    public static boolean getBoolean(Context context, String key, boolean defaultValue) {
-        return getPrefs(context).getBoolean(key, defaultValue);
+    public static boolean getBoolean(Context context,String fileName, String key, boolean defaultValue) {
+        return getPrefs(context, fileName).getBoolean(key, defaultValue);
     }
 
     //Strings
-    public static void save(Context context, String key, String value) {
-        getPrefs(context).edit().putString(key, value).commit();
+    public static void save(Context context,String fileName, String key, String value) {
+        getPrefs(context, fileName).edit().putString(key, value).commit();
     }
 
-    public static String getString(Context context, String key) {
-        return getPrefs(context).getString(key, "");
+    public static String getString(Context context,String fileName, String key) {
+        return getPrefs(context, fileName).getString(key, "");
     }
 
-    public static String getString(Context context, String key, String defaultValue) {
-        return getPrefs(context).getString(key, defaultValue);
+    public static String getString(Context context,String fileName, String key, String defaultValue) {
+        return getPrefs(context, fileName).getString(key, defaultValue);
     }
 
     //Integers
-    public static void save(Context context, String key, int value) {
-        getPrefs(context).edit().putInt(key, value).commit();
+    public static void save(Context context,String fileName, String key, int value) {
+        getPrefs(context, fileName).edit().putInt(key, value).commit();
     }
 
-    public static int getInt(Context context, String key) {
-        return getPrefs(context).getInt(key, 0);
+    public static int getInt(Context context,String fileName, String key) {
+        return getPrefs(context, fileName).getInt(key, 0);
     }
 
-    public static int getInt(Context context, String key, int defaultValue) {
-        return getPrefs(context).getInt(key, defaultValue);
+    public static int getInt(Context context,String fileName, String key, int defaultValue) {
+        return getPrefs(context, fileName).getInt(key, defaultValue);
     }
 
     //Floats
-    public static void save(Context context, String key, float value) {
-        getPrefs(context).edit().putFloat(key, value).commit();
+    public static void save(Context context,String fileName, String key, float value) {
+        getPrefs(context, fileName).edit().putFloat(key, value).commit();
     }
 
-    public static float getFloat(Context context, String key) {
-        return getPrefs(context).getFloat(key, 0);
+    public static float getFloat(Context context,String fileName, String key) {
+        return getPrefs(context, fileName).getFloat(key, 0);
     }
 
-    public static float getFloat(Context context, String key, float defaultValue) {
-        return getPrefs(context).getFloat(key, defaultValue);
+    public static float getFloat(Context context,String fileName, String key, float defaultValue) {
+        return getPrefs(context, fileName).getFloat(key, defaultValue);
     }
 
     //Longs
-    public static void save(Context context, String key, long value) {
-        getPrefs(context).edit().putLong(key, value).commit();
+    public static void save(Context context,String fileName, String key, long value) {
+        getPrefs(context, fileName).edit().putLong(key, value).commit();
     }
 
-    public static long getLong(Context context, String key) {
-        return getPrefs(context).getLong(key, 0);
+    public static long getLong(Context context,String fileName, String key) {
+        return getPrefs(context, fileName).getLong(key, 0);
     }
 
-    public static long getLong(Context context, String key, long defaultValue) {
-        return getPrefs(context).getLong(key, defaultValue);
+    public static long getLong(Context context,String fileName, String key, long defaultValue) {
+        return getPrefs(context, fileName).getLong(key, defaultValue);
     }
 
     //StringSets
-    public static void save(Context context, String key, Set<String> value) {
-        getPrefs(context).edit().putStringSet(key, value).commit();
+    public static void save(Context context,String fileName, String key, Set<String> value) {
+        getPrefs(context, fileName).edit().putStringSet(key, value).commit();
     }
 
-    public static Set<String> getStringSet(Context context, String key) {
-        return getPrefs(context).getStringSet(key, null);
+    public static Set<String> getStringSet(Context context,String fileName, String key) {
+        return getPrefs(context, fileName).getStringSet(key, null);
     }
 
-    public static Set<String> getStringSet(Context context, String key, Set<String> defaultValue) {
-        return getPrefs(context).getStringSet(key, defaultValue);
+    public static Set<String> getStringSet(Context context,String fileName, String key, Set<String> defaultValue) {
+        return getPrefs(context, fileName).getStringSet(key, defaultValue);
     }
 }

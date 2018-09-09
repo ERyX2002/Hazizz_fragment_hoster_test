@@ -3,6 +3,8 @@ package com.indeed.hazizz.Activities;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,18 +14,28 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
+import com.indeed.hazizz.Communication.MiddleMan;
+import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.R;
+import com.indeed.hazizz.SharedPrefs;
+
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+
+    private TextView textView_userName;
+    private TextView textView_email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+     //   setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -34,14 +46,47 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
+       // NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+
+       // LayoutInflater.inflate();
+     //   setContentView(R.layout.nav_header_main);
+     //   textView_userName = findViewById(R.id.textView_userName);
+     //   textView_email = findViewById(R.id.textView_email);
+      //  textView_userName.append("hello there");
+      //  textView_userName.setText("usernaem2");
+      //  textView_email.setText("email2");
+
+        View headerView = navigationView.getHeaderView(0);
+        TextView navUsername = (TextView) headerView.findViewById(R.id.textView_userName);
+        TextView navEmail = (TextView) headerView.findViewById(R.id.textView_email);
+
+        CustomResponseHandler responseHandler = new CustomResponseHandler() {
+            @Override
+            public void onResponse(HashMap<String, Object> response) {
+                navUsername.setText((String)response.get("username"));
+                navEmail.setText((String)response.get("emailAddress"));
+            }
+            @Override
+            public void onFailure() {
+                Log.e("hey", "4");
+                Log.e("hey", "got here onFailure");
+            }
+            @Override
+            public void onErrorResponse(HashMap<String, Object> errorResponse) {
+                Log.e("hey", "onErrorResponse");
+            }
+        };
+
+        MiddleMan sendRegisterRequest = new MiddleMan(getBaseContext(), "me", null, responseHandler);
+        sendRegisterRequest.sendRequest();
+
+
+
     }
 
     @Override
