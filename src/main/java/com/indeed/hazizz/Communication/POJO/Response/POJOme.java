@@ -1,40 +1,37 @@
 package com.indeed.hazizz.Communication.POJO.Response;
 
-import com.indeed.hazizz.Communication.POJO.POJOInterface;
-
-import java.util.ArrayList;
 import java.util.List;
 
-public class POJOme implements POJOInterface {
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
+@Data
+public class POJOme {
 
+    private final int id;
+    public final String username;
+    public final String emailAddress;
+    private final List<String> permissions;
+    private final List<Group> groups;
+    private final Boolean locked;
+    private final Boolean disabled;
+    private final Boolean expired;
+    private final String registrationDate;
+    private final String lastPasswordReset;
 
-    public Object getValue(String key) {
-        return null;
+    public POJOme(int id, String username, String emailAddress, List<String> permissions, List<Group> groups, Boolean locked, Boolean disabled, Boolean expired, String registrationDate, String lastPasswordReset) {
+        this.id = id;
+        this.username = username;
+        this.emailAddress = emailAddress;
+        this.permissions = permissions;
+        this.groups = groups;
+        this.locked = locked;
+        this.disabled = disabled;
+        this.expired = expired;
+        this.registrationDate = registrationDate;
+        this.lastPasswordReset = lastPasswordReset;
     }
-
-    @Override
-    public List<Object> getList() {
-        return null;
-    }
-
-    @Override
-    public Object getInnerClass() {
-        return null;
-    }
-
-    public int id;
-    public String username;
-    public String emailAddress;
-
-    public List<String> permissions;
-    public List<Group> groups;
-
-    public Boolean locked;
-    public Boolean disabled;
-    public Boolean expired;
-    public String registrationDate;
-    public String lastPasswordReset;
 
     class Group{
         public int id;

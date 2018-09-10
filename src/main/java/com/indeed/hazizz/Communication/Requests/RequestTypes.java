@@ -3,6 +3,7 @@ package com.indeed.hazizz.Communication.Requests;
 //import com.indeed.hazizz.Communication.POJO.Requests.Register;
 import com.indeed.hazizz.Communication.POJO.Requests.RequestInterface;
 import com.indeed.hazizz.Communication.POJO.Response.Error;
+import com.indeed.hazizz.Communication.POJO.Response.POJOme;
 import com.indeed.hazizz.Communication.POJO.Response.ResponseInterface;
 import com.indeed.hazizz.Communication.SetupInterface;
 
@@ -11,6 +12,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.HeaderMap;
@@ -42,7 +44,7 @@ public interface RequestTypes{
     );
 
     @GET("me/fulldetails")
-    Call<HashMap<String, Object>> me(
+    Call<POJOme> me(
             @HeaderMap Map<String, String> headers
     );
 

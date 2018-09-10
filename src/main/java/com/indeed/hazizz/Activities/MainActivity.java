@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
+import com.indeed.hazizz.Communication.POJO.Response.POJOme;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.SharedPrefs;
 
@@ -68,9 +69,16 @@ public class MainActivity extends AppCompatActivity
         CustomResponseHandler responseHandler = new CustomResponseHandler() {
             @Override
             public void onResponse(HashMap<String, Object> response) {
-                navUsername.setText((String)response.get("username"));
-                navEmail.setText((String)response.get("emailAddress"));
+
             }
+
+            @Override
+            public void onResponse1(Object response) {
+
+                navUsername.setText(((POJOme) response).username);
+                navEmail.setText(((POJOme) response).emailAddress);
+        }
+
             @Override
             public void onFailure() {
                 Log.e("hey", "4");
@@ -83,7 +91,7 @@ public class MainActivity extends AppCompatActivity
         };
 
         MiddleMan sendRegisterRequest = new MiddleMan(getBaseContext(), "me", null, responseHandler);
-        sendRegisterRequest.sendRequest();
+        sendRegisterRequest.sendRequest2();
 
 
 

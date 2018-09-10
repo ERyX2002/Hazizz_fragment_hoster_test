@@ -35,6 +35,11 @@ public class MiddleMan{
         newRequest.makeCall();
     }
 
+    public void sendRequest2() {
+        newRequest.requestType.setupCall();
+        newRequest.requestType.makeCall();
+    }
+
     public HashMap<String, Object>  getResponse() {
         return newRequest.getResponse();
     }

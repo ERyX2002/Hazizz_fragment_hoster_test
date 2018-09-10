@@ -184,6 +184,11 @@ public class SignupActivity extends AppCompatActivity {
                         }
 
                         @Override
+                        public void onResponse1(Object response) {
+
+                        }
+
+                        @Override
                         public void onFailure() {
                             textView.append("\n your signup was successful");
                             switchToLoginActivity();

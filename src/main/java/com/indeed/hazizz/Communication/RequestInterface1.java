@@ -7,5 +7,6 @@ import org.json.JSONObject;
 public interface RequestInterface1<T> {
     public void setupCall();
     public T getResponse();
+    public void makeCall();
 
 }

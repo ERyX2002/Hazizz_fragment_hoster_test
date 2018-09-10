@@ -183,6 +183,11 @@ public class LoginActivity extends AppCompatActivity {
                         }
 
                         @Override
+                        public void onResponse1(Object response) {
+
+                        }
+
+                        @Override
                         public void onFailure() {
                             textView.append("\n  no response");
                             Log.e("hey", "4");
