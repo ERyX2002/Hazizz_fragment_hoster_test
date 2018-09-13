@@ -30,6 +30,11 @@ public class MiddleMan{
         newRequest = new Request(context, requestType, pp, cOnResponse);
     }
 
+    public MiddleMan(Context context, String requestType, HashMap<String, Object>  pp, CustomResponseHandler cOnResponse, int groupID) {
+        this.requestType = requestType;
+        newRequest = new Request(context, requestType, pp, cOnResponse, groupID);
+    }
+
     public void sendRequest() {
         newRequest.requestType.setupCall();
         newRequest.makeCall();

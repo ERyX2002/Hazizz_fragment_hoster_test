@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
+import com.indeed.hazizz.Communication.POJO.Response.POJOgroup;
 import com.indeed.hazizz.Communication.POJO.Response.POJOme;
 import com.indeed.hazizz.Communication.RequestInterface1;
 import com.indeed.hazizz.SharedPrefs;
@@ -24,6 +25,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Path;
 
 public class Request {
 
@@ -45,6 +47,8 @@ public class Request {
     CustomResponseHandler cOnResponse;
     Context context;
 
+    int groupID;
+
 
     public Request(Context context, String reqType, HashMap<String, Object>  request, CustomResponseHandler cOnResponse){
         this.cOnResponse = cOnResponse;
@@ -63,6 +67,24 @@ public class Request {
         aRequest = retrofit.create(RequestTypes.class);
     }
 
+    public Request(Context context, String reqType, HashMap<String, Object>  request, CustomResponseHandler cOnResponse, int groupID){
+        this.cOnResponse = cOnResponse;
+        this.request = request;
+        this.context = context;
+        this.groupID = groupID;
+
+        Gson gson = new GsonBuilder().serializeNulls().create();
+
+        retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+        findRequestType(reqType);
+        //   requestType = new Login();
+        aRequest = retrofit.create(RequestTypes.class);
+    }
+
     public void findRequestType(String reqType){
         switch(reqType){
             case "register":
@@ -74,13 +96,18 @@ public class Request {
             case "me":
                 requestType = new Me();
                 break;
+            case "getGroup":
+                requestType = new GetGroup();
+                break;
         }
     }
 
     public void makeCall(){
         try {
             requestType.makeCall();
+            Log.e("hey", "its fine");
         }catch(Exception e){
+            Log.e("hey", "got error here");
             makeCall1();
         }
     }
@@ -397,7 +424,7 @@ public class Request {
         @Override
         public void setupCall() {
             HashMap<String, String> headerMap = new HashMap<String, String>();
-            headerMap.put("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6ImJlbGEiLCJzdWIiOiJBdXRoZW50aWNhdGlvbiB0b2tlbiIsImlhdCI6MTUzNjU5MzU5OCwiZXhwIjoxNTM2Njc5OTk4fQ.t-ZV21B5nalIX3mrFjKPvF_dfyRjaguxK0R18MUwpP5o06aMurazc6klOKNVzYWbwe5f2t9hjtDCfiooTfAQ7g");//SharedPrefs.getString(context, "token", "token"));
+            headerMap.put("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6ImJlbGEiLCJzdWIiOiJBdXRoZW50aWNhdGlvbiB0b2tlbiIsImlhdCI6MTUzNjg1OTQyMiwiZXhwIjoxNTM2OTQ1ODIyfQ.Cg8v5L5ICIEwFxgRZH45A7ti8TTEKb1I0O7NprGu5VgoRYbo-gYLu2uXklzkWbpItQ5lOTt4QewJeUg3yYZdJw");//SharedPrefs.getString(context, "token", "token"));
             call1 = aRequest.me(headerMap);
         }
         public HashMap<String, Object>  getResponse() {
@@ -416,11 +443,9 @@ public class Request {
                         Log.e("hey", (String)response.body().toString());
                         Log.e("hey", "2");
 
-
                         cOnResponse.onResponse1(response.body());
                         Log.e("hey", "3");
                     }
-
                     else if(false){
                         try {
                             String strError = response.errorBody().string();
@@ -445,7 +470,6 @@ public class Request {
                     //   Log.e("hey", "errorCode is : " + response.body().getErrorCode());
                     // responseHandler.checkErrorCode(response.body().getErrorCode());
                     // responseHandler.checkHttpStatus(response.code());
-
                 }
                 @Override
                 public void onFailure(Call<POJOme> call, Throwable t) {
@@ -454,7 +478,75 @@ public class Request {
             });
             // TODO  requestType.get("key");
         }
+    }
 
-        public void customMethod(){}
+    public class GetGroup implements RequestInterface1 {
+        //   public String name = "register";
+        GetGroup(){
+            Log.e("hey", "created GetGroup object");
+        }
+
+        Call<POJOgroup> call1;
+
+        @Override
+        public void setupCall() {
+            HashMap<String, String> headerMap = new HashMap<String, String>();
+            headerMap.put("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6ImJlbGEiLCJzdWIiOiJBdXRoZW50aWNhdGlvbiB0b2tlbiIsImlhdCI6MTUzNjg1OTQyMiwiZXhwIjoxNTM2OTQ1ODIyfQ.Cg8v5L5ICIEwFxgRZH45A7ti8TTEKb1I0O7NprGu5VgoRYbo-gYLu2uXklzkWbpItQ5lOTt4QewJeUg3yYZdJw");//SharedPrefs.getString(context, "token", "token"));
+
+            HashMap<String, String> pathMap = new HashMap<String, String>();
+            pathMap.put("id", Integer.toString(groupID));
+            call1 = aRequest.getGroup(Integer.toString(groupID), headerMap);
+        }
+        public HashMap<String, Object>  getResponse() {
+            return response1;
+        }
+
+        @Override
+        public void makeCall() {
+            call1.enqueue(new Callback<POJOgroup>() {
+                @Override
+                public void onResponse(Call<POJOgroup> call, Response<POJOgroup> response) {
+                    Log.e("hey", "gotResponse");
+                    Log.e("hey", response.raw().toString());
+
+                    if(response.body() != null){ // response != null
+                        Log.e("hey", (String)response.body().toString());
+                        Log.e("hey", "2");
+
+                        cOnResponse.onResponse1(response.body());
+                        Log.e("hey", "3");
+                    }
+                    else if(false){
+                        try {
+                            String strError = response.errorBody().string();
+                            JSONObject errorJson = new JSONObject(strError);
+                            HashMap<String, Object> errorResponse = new HashMap<String, Object>();
+
+                            errorResponse.put("time", String.valueOf(errorJson.get("time")));
+                            errorResponse.put("errorCode", String.valueOf(errorJson.get("errorCode")));
+                            errorResponse.put("title", String.valueOf(errorJson.get("title")));
+                            errorResponse.put("message", String.valueOf(errorJson.get("message")));
+
+                            cOnResponse.onErrorResponse(errorResponse);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    // Log.e("hey", "errorCode : " + response.errorBody().get("errorCode"));
+
+                    //   Log.e("hey", "errorCode is : " + response.body().getErrorCode());
+                    // responseHandler.checkErrorCode(response.body().getErrorCode());
+                    // responseHandler.checkHttpStatus(response.code());
+                }
+                @Override
+                public void onFailure(Call<POJOgroup> call, Throwable t) {
+                    cOnResponse.onFailure();
+                }
+            });
+            // TODO  requestType.get("key");
+        }
     }
 }

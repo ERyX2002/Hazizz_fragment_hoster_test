@@ -18,11 +18,14 @@ import android.widget.TextView;
 
 import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
+import com.indeed.hazizz.Communication.POJO.Response.POJOgroup;
 import com.indeed.hazizz.Communication.POJO.Response.POJOme;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.SharedPrefs;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -31,6 +34,10 @@ public class MainActivity extends AppCompatActivity
     private TextView textView_userName;
     private TextView textView_email;
 
+
+    private List<Integer> groupIDs;
+    private List<POJOgroup> groups;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,12 +45,18 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
      //   setSupportActionBar(toolbar);
 
+
+        groupIDs = new ArrayList<Integer>();
+        groups = new ArrayList<POJOgroup>();
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+
+                groups = getGroups();
             }
         });
 
@@ -74,9 +87,13 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onResponse1(Object response) {
+                navUsername.setText(((POJOme) response).getUsername());
+                navEmail.setText(((POJOme) response).getEmailAddress());
 
-                navUsername.setText(((POJOme) response).username);
-                navEmail.setText(((POJOme) response).emailAddress);
+                for(POJOgroup g : ((POJOme) response).getGroups()){
+                    groupIDs.add(g.getId());
+                    Log.e("hey", "added groupID");
+                }
         }
 
             @Override
@@ -93,8 +110,7 @@ public class MainActivity extends AppCompatActivity
         MiddleMan sendRegisterRequest = new MiddleMan(getBaseContext(), "me", null, responseHandler);
         sendRegisterRequest.sendRequest2();
 
-
-
+        groups = getGroups();
     }
 
     @Override
@@ -123,6 +139,7 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Log.e("hey", "action_settings");
             return true;
         }
 
@@ -132,11 +149,12 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+        Log.e("hey", "chechk1");
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            // Handle the camera action
+            Log.e("hey", "chechk2");
+            groups = getGroups();
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
@@ -152,5 +170,43 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public List<POJOgroup> getGroups(){
+        List<POJOgroup> groupsList = new ArrayList<POJOgroup>();
+        Log.e("hey", "atleast here 2");
+        CustomResponseHandler responseHandler = new CustomResponseHandler() {
+            @Override
+            public void onResponse(HashMap<String, Object> response) {
+
+            }
+
+            @Override
+            public void onResponse1(Object response) {
+                groupsList.add((POJOgroup) response);
+                Log.e("hey", "getGroups works");
+            }
+
+            @Override
+            public void onFailure() {
+                Log.e("hey", "4");
+                Log.e("hey", "got here onFailure");
+            }
+
+            @Override
+            public void onErrorResponse(HashMap<String, Object> errorResponse) {
+                Log.e("hey", "onErrorResponse");
+            }
+        };
+        if(groupIDs == null){
+            Log.e("hey", "group id is null 1");
+
+        }
+        for(int groupID : groupIDs) {
+            Log.e("hey", "here 1");
+            MiddleMan sendRegisterRequest = new MiddleMan(getBaseContext(), "getGroup", null, responseHandler, groupID);
+            sendRegisterRequest.sendRequest2();
+        }
+        return groupsList;
     }
 }
