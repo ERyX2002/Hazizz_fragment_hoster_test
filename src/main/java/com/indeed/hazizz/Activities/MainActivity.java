@@ -1,5 +1,7 @@
 package com.indeed.hazizz.Activities;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -30,10 +32,8 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-
     private TextView textView_userName;
     private TextView textView_email;
-
 
     private List<Integer> groupIDs;
     private List<POJOgroup> groups;
@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
      //   setSupportActionBar(toolbar);
 
-
         groupIDs = new ArrayList<Integer>();
         groups = new ArrayList<POJOgroup>();
 
@@ -55,25 +54,12 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-
-                groups = getGroups();
             }
         });
 
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-
-       // NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-
-       // LayoutInflater.inflate();
-     //   setContentView(R.layout.nav_header_main);
-     //   textView_userName = findViewById(R.id.textView_userName);
-     //   textView_email = findViewById(R.id.textView_email);
-      //  textView_userName.append("hello there");
-      //  textView_userName.setText("usernaem2");
-      //  textView_email.setText("email2");
+        navigationView.bringToFront();
 
         View headerView = navigationView.getHeaderView(0);
         TextView navUsername = (TextView) headerView.findViewById(R.id.textView_userName);
@@ -109,8 +95,6 @@ public class MainActivity extends AppCompatActivity
 
         MiddleMan sendRegisterRequest = new MiddleMan(getBaseContext(), "me", null, responseHandler);
         sendRegisterRequest.sendRequest2();
-
-        groups = getGroups();
     }
 
     @Override
@@ -153,7 +137,6 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            Log.e("hey", "chechk2");
             groups = getGroups();
         } else if (id == R.id.nav_gallery) {
 
@@ -166,7 +149,6 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_send) {
 
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -207,6 +189,14 @@ public class MainActivity extends AppCompatActivity
             MiddleMan sendRegisterRequest = new MiddleMan(getBaseContext(), "getGroup", null, responseHandler, groupID);
             sendRegisterRequest.sendRequest2();
         }
+
+       /* Context context = getActivity();
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);); */
+
+        Log.e("hey", SharedPrefs.getString(getApplicationContext(), "token", "token"));
+
+
         return groupsList;
     }
 }
