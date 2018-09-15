@@ -85,6 +85,8 @@ public class Request {
         aRequest = retrofit.create(RequestTypes.class);
     }
 
+
+
     public void findRequestType(String reqType){
         switch(reqType){
             case "register":
@@ -423,7 +425,7 @@ public class Request {
         @Override
         public void setupCall() {
             HashMap<String, String> headerMap = new HashMap<String, String>();
-            headerMap.put("Authorization", "Bearer " + SharedPrefs.getString(getBaseContext(), "token", "token"));//SharedPrefs.getString(context, "token", "token"));
+            headerMap.put("Authorization", "Bearer " + SharedPrefs.getString(context, "token", "token"));//SharedPrefs.getString(context, "token", "token"));
             call1 = aRequest.me(headerMap);
         }
         public HashMap<String, Object>  getResponse() {
@@ -490,7 +492,7 @@ public class Request {
         @Override
         public void setupCall() {
             HashMap<String, String> headerMap = new HashMap<String, String>();
-            headerMap.put("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6ImJlbGEiLCJzdWIiOiJBdXRoZW50aWNhdGlvbiB0b2tlbiIsImlhdCI6MTUzNjg1OTQyMiwiZXhwIjoxNTM2OTQ1ODIyfQ.Cg8v5L5ICIEwFxgRZH45A7ti8TTEKb1I0O7NprGu5VgoRYbo-gYLu2uXklzkWbpItQ5lOTt4QewJeUg3yYZdJw");//SharedPrefs.getString(context, "token", "token"));
+            headerMap.put("Authorization", "Bearer " + SharedPrefs.getString(context, "token", "token"));//SharedPrefs.getString(context, "token", "token"));
 
             HashMap<String, String> pathMap = new HashMap<String, String>();
             pathMap.put("id", Integer.toString(groupID));

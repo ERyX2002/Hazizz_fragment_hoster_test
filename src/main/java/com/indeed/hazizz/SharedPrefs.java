@@ -14,12 +14,16 @@ public class SharedPrefs {
     //SharedPreferences file name
     private static String fileName;
     private static String SHARED_PREFS_FILE_NAME = "token";
+    private static Context context;
 
     //here you can centralize all your shared prefs keys
 
     //get the SharedPreferences object instance
     //create SharedPreferences file if not present
 
+    private static void setContext(Context c){
+        context = c;
+    }
 
     private static SharedPreferences getPrefs(Context context, String fileName1) {
         fileName = fileName1;

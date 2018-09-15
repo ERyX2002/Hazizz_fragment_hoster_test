@@ -180,8 +180,6 @@ public class LoginActivity extends AppCompatActivity {
                             SharedPrefs.save(getBaseContext(), "token", "token", (String) response.get("token"));
                             textView.append("\n" + SharedPrefs.getString(getBaseContext(), "token", "token"));
                             switchToMain();
-
-
                         }
 
                         @Override

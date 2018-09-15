@@ -22,6 +22,7 @@ import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOgroup;
 import com.indeed.hazizz.Communication.POJO.Response.POJOme;
+import com.indeed.hazizz.Fragments.GroupFragment;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.SharedPrefs;
 
@@ -35,8 +36,10 @@ public class MainActivity extends AppCompatActivity
     private TextView textView_userName;
     private TextView textView_email;
 
-    private List<Integer> groupIDs;
-    private List<POJOgroup> groups;
+
+
+    public List<Integer> groupIDs;
+    public List<POJOgroup> groups;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,6 +141,15 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_camera) {
             groups = getGroups();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new GroupFragment()).commit();
+
+            Bundle bundle = new Bundle();
+         //   bundle.putParcelable("groups", groups.get(0));
+
+            GroupFragment groupF = new GroupFragment();
+
+            groupF.setArguments(bundle);
+
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
@@ -189,14 +201,9 @@ public class MainActivity extends AppCompatActivity
             MiddleMan sendRegisterRequest = new MiddleMan(getBaseContext(), "getGroup", null, responseHandler, groupID);
             sendRegisterRequest.sendRequest2();
         }
-
        /* Context context = getActivity();
         SharedPreferences sharedPref = getActivity().getSharedPreferences(
                 getString(R.string.preference_file_key), Context.MODE_PRIVATE);); */
-
-        Log.e("hey", SharedPrefs.getString(getApplicationContext(), "token", "token"));
-
-
         return groupsList;
     }
 }
