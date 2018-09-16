@@ -105,13 +105,13 @@ public class Request {
     }
 
     public void makeCall(){
-        try {
+      //  try {
             requestType.makeCall();
             Log.e("hey", "its fine");
-        }catch(Exception e){
+       /* }catch(Exception e){
             Log.e("hey", "got error here");
             makeCall1();
-        }
+        } */
     }
 
     public void makeCall1(){
@@ -354,6 +354,10 @@ public class Request {
         public void setupCall() {
             HashMap<String, String> headerMap = new HashMap<String, String>();
             headerMap.put("Content-Type", "application/json");
+         /*   headerMap.put("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFt" +
+                    "ZSI6ImJlbGEiLCJzdWIiOiJBdXRoZW50aWNhdGlvbiB0b2tlbiIsImlhdCI6MT" +
+                    "UzNzA5MzcyNiwiZXhwIjoxNTM3MTgwMTI2fQ.NbQNNCyMEIsGwVPton8bruyreAzJKPs" +
+                    "x-fjYf3lMVQHYoqROAzuret19uyMd9NPM5Nc6437fLApLXPhMerx16g"); */
           //  Log.e("hey", requestJson.toString());
             call = aRequest.register(headerMap, request);
         }

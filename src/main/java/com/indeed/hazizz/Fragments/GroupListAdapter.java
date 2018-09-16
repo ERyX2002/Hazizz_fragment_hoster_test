@@ -8,12 +8,12 @@ import android.widget.ArrayAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GroupListAdapter extends ArrayAdapter<Group> {
+public class GroupListAdapter{ /*extends ArrayAdapter<Group> {
 
     private Fragment fragment;
 
     public GroupListAdapter(@NonNull Fragment fragment, int resource, @NonNull ArrayList<Group> objects) {
-        super(fragment, resource, objects);
+        super(context, resource, objects);
         fragment = fragment;
-    }
+    } */
 }

@@ -21,30 +21,25 @@ import retrofit2.http.*;
 
 public interface RequestTypes{
 
- //   private HashMap<String, String> headerMap;
-
-    @POST("register/")
+    @POST("register")
     Call<HashMap<String, Object>> register(
             @HeaderMap Map<String, String> headers,
             @Body HashMap<String, Object>  register
-
     );
 
     @GET("users/")
     Call<HashMap<String, Object>> getUsers(
             @HeaderMap Map<String, String> headers,
             @Body JSONObject registerBody
-
     );
 
     @POST("auth/")
     Call<HashMap<String, Object>> login(
             @HeaderMap Map<String, String> headers,
             @Body HashMap<String, Object> registerBody
-
     );
 
-    @GET("me/fulldetails")
+    @GET("me/details")
     Call<POJOme> me(
             @HeaderMap Map<String, String> headers
     );
@@ -56,31 +51,4 @@ public interface RequestTypes{
             @Path("id") String id,
             @HeaderMap Map<String, String> headers
     );
-
-/*
-    public HashMap<String, String> makeHeader(){
-        headerMap = new HashMap<String, String>();
-        headerMap.put("Content-Type", "application/json");
-        return headerMap;
-    }
-
-    public Call<JSONObject> makeCall(JSONObject requestJson){
-        Call<JSONObject> asd = call(makeHeader(), requestJson);
-        return asd;
-    }
- */
-
-    //public void call();
-
-
-
-   /* @Override
-    public Call<JSONObject> register(Map<String, String> headers, JSONObject registerBody) {
-        return null;
-    }
-
-    @Override
-    public Call<JSONObject> auth(JSONObject authBody) {
-        return null;
-    } */
 }

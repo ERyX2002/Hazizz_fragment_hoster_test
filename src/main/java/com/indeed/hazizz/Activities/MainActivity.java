@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +24,7 @@ import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOgroup;
 import com.indeed.hazizz.Communication.POJO.Response.POJOme;
+import com.indeed.hazizz.Fragments.ChatFragment;
 import com.indeed.hazizz.Fragments.GroupFragment;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.SharedPrefs;
@@ -36,10 +39,7 @@ public class MainActivity extends AppCompatActivity
     private TextView textView_userName;
     private TextView textView_email;
 
-
-
-    public List<Integer> groupIDs;
-    public List<POJOgroup> groups;
+    private ArrayList<Integer> groupIDs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity
      //   setSupportActionBar(toolbar);
 
         groupIDs = new ArrayList<Integer>();
-        groups = new ArrayList<POJOgroup>();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -129,7 +128,6 @@ public class MainActivity extends AppCompatActivity
             Log.e("hey", "action_settings");
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -139,20 +137,21 @@ public class MainActivity extends AppCompatActivity
         Log.e("hey", "chechk1");
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            groups = getGroups();
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new GroupFragment()).commit();
+        if (id == R.id.nav_groups) {
 
+           // getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new GroupFragment()).commit();
+            // TODO send groupIDs to fragment
             Bundle bundle = new Bundle();
-         //   bundle.putParcelable("groups", groups.get(0));
+            bundle.putIntegerArrayList("groupIDs", groupIDs);
+            GroupFragment groupFragment = new GroupFragment();
+            groupFragment.setArguments(bundle);
 
-            GroupFragment groupF = new GroupFragment();
+            makeTransaction(groupFragment);
 
-            groupF.setArguments(bundle);
-
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_unfinished_homeworks) {
+            ChatFragment chatFragment = new ChatFragment();
+            makeTransaction(chatFragment);
+        } else if (id == R.id.nav_finished_homeworks) {
 
         } else if (id == R.id.nav_manage) {
 
@@ -166,44 +165,9 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    public List<POJOgroup> getGroups(){
-        List<POJOgroup> groupsList = new ArrayList<POJOgroup>();
-        Log.e("hey", "atleast here 2");
-        CustomResponseHandler responseHandler = new CustomResponseHandler() {
-            @Override
-            public void onResponse(HashMap<String, Object> response) {
-
-            }
-
-            @Override
-            public void onResponse1(Object response) {
-                groupsList.add((POJOgroup) response);
-                Log.e("hey", "getGroups works");
-            }
-
-            @Override
-            public void onFailure() {
-                Log.e("hey", "4");
-                Log.e("hey", "got here onFailure");
-            }
-
-            @Override
-            public void onErrorResponse(HashMap<String, Object> errorResponse) {
-                Log.e("hey", "onErrorResponse");
-            }
-        };
-        if(groupIDs == null){
-            Log.e("hey", "group id is null 1");
-
-        }
-        for(int groupID : groupIDs) {
-            Log.e("hey", "here 1");
-            MiddleMan sendRegisterRequest = new MiddleMan(getBaseContext(), "getGroup", null, responseHandler, groupID);
-            sendRegisterRequest.sendRequest2();
-        }
-       /* Context context = getActivity();
-        SharedPreferences sharedPref = getActivity().getSharedPreferences(
-                getString(R.string.preference_file_key), Context.MODE_PRIVATE);); */
-        return groupsList;
+    public void makeTransaction(Fragment frag){
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.fragment_container, frag);
+        fragmentTransaction.commit();
     }
 }
